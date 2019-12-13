@@ -1,0 +1,183 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using System.Collections; 
+
+namespace Assigment1_C19
+{
+    class Search16s
+    {
+        static ArrayList seq = new ArrayList();
+        static void Main(string[] args)
+        {
+            FileStream fs = new FileStream(args[1], FileMode.Open, FileAccess.Read); ;
+            StreamReader fr = new StreamReader(fs);
+
+            while (!fr.EndOfStream)
+            {
+
+                seq.Add(fr.ReadLine());
+            }
+
+            fs.Close();
+
+
+            if (args[0].Equals("-level1"))
+            {
+                Level1Class level1 = new Level1Class();
+                level1.ShowSequence(args[2], args[3], seq);
+            }
+
+
+            else if (args[0].Equals("-level2"))
+            {
+                Level2Class level2 = new Level2Class();
+                level2.ShowSequence(args[2], seq);
+            }
+
+            else if (args[0].Equals("-level3"))
+            {
+                Level3Class level3 = new Level3Class();
+                level3.ShowSequence(args[2], args[3]);
+            }
+            Console.ReadLine();
+        }
+
+        class Level1Class
+        {
+            //creating function for level1 to show dta using line number
+            public void ShowSequence(string from, string to, ArrayList list)
+            {
+                if ((Convert.ToInt32(from) % 2) != 1)
+                {
+                    Console.WriteLine("Please input Odd Sequence");
+                    return;
+                }
+
+                int f = (Convert.ToInt32(from) - 1);
+                int t = f + (Convert.ToInt32(to) * 2);
+
+                for (int i = f; i < t; i++)
+                {
+                    Console.WriteLine(list[i].ToString());
+                    
+                }
+
+                Console.WriteLine("Completed");
+                Console.ReadLine(); 
+
+
+
+            }
+        }
+
+        class Level2Class
+        {
+
+            public void ShowSequence(string id, ArrayList list)
+            {
+                int y = 0;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].ToString().Contains(id))
+                    {
+                        string[] part = list[i].ToString().Split(' ');
+                        foreach (string aa in part)
+                        {
+
+                            if (aa.Equals(">" + id))
+                            {
+                                y = 1;
+                                Console.WriteLine(list[i].ToString() + "\n" + list[i + 1].ToString());
+                               
+                            }
+                        }
+
+
+                    }
+                }
+
+                if (y == 0)
+                {
+                    y = 1;
+                    Console.WriteLine("Error, sequence " + id + " not found.");
+                }
+            }
+
+
+        }
+
+        class Level3Class
+        {
+            public void ShowSequence(string read, string write)
+            {
+                FileStream fs;
+                StreamReader fr;
+
+                fs = new FileStream(read, FileMode.Open, FileAccess.Read);
+
+                fr = new StreamReader(fs);
+                ArrayList ar1 = new ArrayList();
+
+                while (!fr.EndOfStream)
+                {
+
+                    ar1.Add(fr.ReadLine());
+                }
+
+                fs.Close();
+
+                StreamWriter wr = new StreamWriter(write);
+
+
+                for (int z = 0; z < ar1.Count; z++)
+                {
+                    int y = 0;
+                    for (int i = 0; i < seq.Count; i++)
+                    {
+                        if (seq[i].ToString().Contains(ar1[z].ToString()))
+                        {
+                            string[] ch = seq[i].ToString().Split(' ');
+                            foreach (string aa in ch)
+                            {
+
+                                if (aa.Equals(">" + ar1[z].ToString()))
+                                {
+                                    y = 1;
+                                    wr.WriteLine(seq[i].ToString() + "\n" + seq[i + 1].ToString());
+
+                                }
+                            }
+
+
+                        }
+                    }
+
+                    if (y == 0)
+                    {
+                        y = 1;
+                        Console.WriteLine("Error, sequence " + ar1[z].ToString() + " not found.");
+                    }
+
+                }
+                wr.Close();
+
+            }
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+}
